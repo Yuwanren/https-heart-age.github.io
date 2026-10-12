@@ -1,16 +1,12 @@
-import { sign } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { accessCodeForDay, shanghaiDay, shanghaiDayEnd } from "../src/lib/access.ts";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-const privateKey = readFileSync(new URL("../access-private.pem", import.meta.url), "utf8");
-const exp = Date.now() + DAY_MS;
-const signature = sign("sha256", Buffer.from(String(exp)), {
-  key: privateKey,
-  dsaEncoding: "ieee-p1363",
+const now = Date.now();
+const code = await accessCodeForDay(shanghaiDay(now));
+const until = new Date(shanghaiDayEnd(now)).toLocaleString("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  hour12: false,
 });
-const code = `${exp}.${signature.toString("base64url")}`;
-const until = new Date(exp).toLocaleString("zh-CN", { hour12: false });
 
 console.log(code);
-console.log(`有效至 ${until}`);
-console.log("把上面的测试码发给对方。24 小时后再次打开会失效。");
+console.log(`有效至北京时间 ${until}（当天 24:00）`);
+console.log("把这 4 位数字发给对方。过了今天再打开，需要新的测试码。");

@@ -18,13 +18,13 @@ export function AccessForm() {
         setPending(true);
         void accept(value).then((ok) => {
           setPending(false);
-          setError(ok ? "" : "测试码无效，或已经超过 24 小时。");
+          setError(ok ? "" : "测试码不正确，或已经过了今天。");
         });
       }}
     >
       <h2 className="text-xl font-medium tracking-tight">输入测试码</h2>
       <p className="mt-3 text-sm leading-7 text-muted">
-        测试码 24 小时内有效。到期后再打开页面，需要新的测试码。只知道网址不能开始测试。
+        4 位数字，按北京时间当天有效。过了 0 点再打开，需要新的测试码。只知道网址不能开始测试。
       </p>
       <label htmlFor="access-code" className="mt-6 block text-sm text-foreground">
         测试码
@@ -32,18 +32,21 @@ export function AccessForm() {
       <input
         id="access-code"
         value={value}
+        inputMode="numeric"
         autoComplete="off"
         spellCheck={false}
-        className="mt-3 w-full min-w-0 rounded-2xl border border-line bg-background px-4 py-3 text-base leading-7 break-all outline-none focus:border-sage"
+        maxLength={4}
+        placeholder="4 位数字"
+        className="mt-3 w-full min-w-0 rounded-2xl border border-line bg-background px-4 py-3 text-center text-2xl tracking-[0.35em] outline-none focus:border-sage"
         onChange={(event) => {
-          setValue(event.target.value);
+          setValue(event.target.value.replace(/\D/g, "").slice(0, 4));
           setError("");
         }}
       />
       <p className="mt-3 min-h-6 text-sm text-foreground" role="alert">
         {error}
       </p>
-      <button type="submit" className="btn btn-primary mt-2 w-full" disabled={!value.trim() || pending}>
+      <button type="submit" className="btn btn-primary mt-2 w-full" disabled={value.length !== 4 || pending}>
         开始测试
       </button>
     </form>

@@ -1,7 +1,8 @@
-export const ACCESS_STORAGE_KEY = "inner-age-access-v1";
-export const ACCESS_TTL_MS = 24 * 60 * 60 * 1000;
-export const ACCESS_PUBLIC_KEY_SPKI =
-  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEiXSHMfvknNHy7Ttn4EVE5U5L6fsHPzXBsWXzFfRjvd0DaiAzoA/qXmc+79BdVc3HuKjhhSbmqxnu5RqbHnqoBw==";
+export const ACCESS_STORAGE_KEY = "inner-age-access-v2";
+
+const ACCESS_SECRET = "inner-age-daily-gate-v1";
+const SHANGHAI = "Asia/Shanghai";
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 export interface AccessSnapshot {
   ready: boolean;
@@ -12,7 +13,6 @@ export interface AccessSnapshot {
 const SERVER_SNAPSHOT: AccessSnapshot = { ready: false, allowed: false, exp: 0 };
 let currentSnapshot: AccessSnapshot = SERVER_SNAPSHOT;
 const listeners = new Set<() => void>();
-let publicKeyPromise: Promise<CryptoKey> | null = null;
 
 function emit() {
   listeners.forEach((listener) => listener());
@@ -31,67 +31,45 @@ export function getServerAccessSnapshot(): AccessSnapshot {
   return SERVER_SNAPSHOT;
 }
 
-function copyBytes(bytes: Uint8Array): Uint8Array<ArrayBuffer> {
-  const copy = new Uint8Array(bytes.byteLength);
-  copy.set(bytes);
-  return copy;
+export function shanghaiDay(now = Date.now()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: SHANGHAI,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
 }
 
-function bytesFromBase64(value: string): Uint8Array | null {
-  try {
-    const binary = atob(value);
-    const bytes = new Uint8Array(binary.length);
-    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
-    return bytes;
-  } catch {
-    return null;
+export function shanghaiDayEnd(now = Date.now()): number {
+  const start = Date.parse(`${shanghaiDay(now)}T00:00:00+08:00`);
+  return start + DAY_MS;
+}
+
+export async function accessCodeForDay(day: string): Promise<string> {
+  const bytes = new TextEncoder().encode(`${ACCESS_SECRET}:${day}`);
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  const value = ((digest[0] << 8) | digest[1]) % 10000;
+  return String(value).padStart(4, "0");
+}
+
+function sameCode(input: string, expected: string): boolean {
+  if (input.length !== expected.length) return false;
+  let diff = 0;
+  for (let index = 0; index < input.length; index += 1) {
+    diff |= input.charCodeAt(index) ^ expected.charCodeAt(index);
   }
+  return diff === 0;
 }
 
-function bytesFromBase64Url(value: string): Uint8Array | null {
-  if (!/^[A-Za-z0-9_-]+$/.test(value)) return null;
-  const padded = value.replace(/-/g, "+").replace(/_/g, "/");
-  const pad = padded.length % 4 === 0 ? "" : "=".repeat(4 - (padded.length % 4));
-  return bytesFromBase64(padded + pad);
-}
+export async function verifyAccessCode(code: string, now = Date.now()): Promise<number | null> {
+  const digits = code.trim();
+  if (!/^\d{4}$/.test(digits)) return null;
 
-async function importPublicKey(spki: string): Promise<CryptoKey> {
-  const bytes = bytesFromBase64(spki);
-  if (!bytes) throw new Error("invalid public key");
-  return crypto.subtle.importKey("spki", copyBytes(bytes), { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
-}
+  const expected = await accessCodeForDay(shanghaiDay(now));
+  if (!sameCode(digits, expected)) return null;
 
-export async function verifyAccessCode(
-  code: string,
-  now = Date.now(),
-  publicKeySpki = ACCESS_PUBLIC_KEY_SPKI,
-): Promise<number | null> {
-  const trimmed = code.trim();
-  const dot = trimmed.indexOf(".");
-  if (dot <= 0) return null;
-
-  const expText = trimmed.slice(0, dot);
-  const signature = bytesFromBase64Url(trimmed.slice(dot + 1));
-  if (!/^\d{13}$/.test(expText) || !signature) return null;
-
-  const exp = Number(expText);
-  if (!Number.isSafeInteger(exp) || exp <= now) return null;
-
-  try {
-    if (publicKeySpki === ACCESS_PUBLIC_KEY_SPKI) {
-      publicKeyPromise ??= importPublicKey(publicKeySpki);
-    }
-    const key = publicKeySpki === ACCESS_PUBLIC_KEY_SPKI ? await publicKeyPromise! : await importPublicKey(publicKeySpki);
-    const valid = await crypto.subtle.verify(
-      { name: "ECDSA", hash: "SHA-256" },
-      key,
-      copyBytes(signature),
-      new TextEncoder().encode(expText),
-    );
-    return valid ? exp : null;
-  } catch {
-    return null;
-  }
+  const exp = shanghaiDayEnd(now);
+  return exp > now ? exp : null;
 }
 
 function browserStorage(): Storage | null {
