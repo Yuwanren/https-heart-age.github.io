@@ -1,10 +1,6 @@
-import type { Metadata } from "next";
-import { ResultView } from "@/components/ResultView";
+import { RedirectPage } from "@/components/RedirectPage";
+import { AGE_RESULT } from "@/lib/routes";
 
-export const metadata: Metadata = {
-  title: "测试结果",
-};
-
-export default function ResultPage() {
-  return <ResultView />;
+export default function LegacyResultPage() {
+  return <RedirectPage href={AGE_RESULT} />;
 }

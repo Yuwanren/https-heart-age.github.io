@@ -2,7 +2,8 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { ShareCard } from "@/components/ShareCard";
-import { buildShareSnippet, buildShareText, copyResult, resolveShareSite, shareResult, type ShareSite, type ShareStatus } from "@/lib/share";
+import { AGE_HOME } from "@/lib/routes";
+import { buildShareSnippet, buildShareText, copyResult, joinSitePath, resolveShareSite, shareResult, type ShareSite, type ShareStatus } from "@/lib/share";
 import type { QuizReport } from "@/types/quiz";
 
 const STATUS_TEXT: Record<ShareStatus, string> = {
@@ -44,7 +45,8 @@ export function ShareButtons({ report, onRetest }: { report: QuizReport; onRetes
   const site = useShareSite();
   const [status, setStatus] = useState<ShareStatus | null>(null);
   const [failedText, setFailedText] = useState("");
-  const snippet = buildShareSnippet(report, site.url);
+  const shareUrl = joinSitePath(site.url, AGE_HOME);
+  const snippet = buildShareSnippet(report, shareUrl);
 
   async function handleCopy() {
     const result = await copyResult(fullText);
@@ -60,7 +62,7 @@ export function ShareButtons({ report, onRetest }: { report: QuizReport; onRetes
 
   return (
     <section className="space-y-4">
-      <ShareCard report={report} site={site} />
+      <ShareCard report={report} site={{ ...site, url: shareUrl }} />
       <div className="rounded-3xl border border-line bg-card px-5 py-7 md:px-8">
         <h2 className="text-xl font-medium">保存这份结果</h2>
         <p className="mt-3 text-sm leading-7 text-muted">

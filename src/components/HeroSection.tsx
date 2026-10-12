@@ -5,6 +5,7 @@ import { AccessForm } from "@/components/AccessForm";
 import { useAccess } from "@/components/AccessProvider";
 import { useQuiz } from "@/components/QuizProvider";
 import { answeredCount, canGenerateResult } from "@/lib/quiz-state";
+import { AGE_RESULT, AGE_TEST } from "@/lib/routes";
 
 export function HeroSection() {
   const { ready: accessReady, allowed } = useAccess();
@@ -34,7 +35,7 @@ export function HeroSection() {
           {accessReady && !allowed ? <AccessForm /> : null}
           {accessReady && allowed ? (
             <>
-              <Link href="/test" className="btn btn-primary w-full sm:w-auto">
+              <Link href={AGE_TEST} className="btn btn-primary w-full sm:w-auto">
                 开始测试
               </Link>
               {ready && hasSaved ? (
@@ -42,7 +43,7 @@ export function HeroSection() {
                   {complete ? (
                     <>
                       当前浏览器里留有一份完整结果。
-                      <Link href="/result" className="ml-2 inline-flex min-h-11 items-center text-foreground underline decoration-line underline-offset-4">
+                      <Link href={AGE_RESULT} className="ml-2 inline-flex min-h-11 items-center text-foreground underline decoration-line underline-offset-4">
                         查看结果
                       </Link>
                     </>

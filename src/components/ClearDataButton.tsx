@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useQuiz } from "@/components/QuizProvider";
 import { revokeAccess } from "@/lib/access";
+import { AGE_HOME } from "@/lib/routes";
 
 export function ClearDataButton({ className = "" }: { className?: string }) {
   const { reset } = useQuiz();
@@ -17,7 +18,7 @@ export function ClearDataButton({ className = "" }: { className?: string }) {
         if (!confirmed) return;
         revokeAccess();
         reset();
-        router.push("/");
+        router.push(AGE_HOME);
       }}
     >
       清除本地数据

@@ -18,11 +18,11 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: shareSite.url ? new URL(shareSite.url) : undefined,
   title: {
-    default: "心理年龄测试",
-    template: "%s · 心理年龄测试",
+    default: "INNER AGE",
+    template: "%s · INNER AGE",
   },
-  description: "你的年龄写在身份证上，你的内心又停留在哪个阶段？20 道关于情绪、关系与自我认知的选择题。",
-  applicationName: "心理年龄测试",
+  description: "选择一项测试。结果在当前浏览器生成，不会上传。",
+  applicationName: "INNER AGE",
 };
 
 export const viewport: Viewport = {

@@ -1,10 +1,6 @@
-import type { Metadata } from "next";
-import { TestFlow } from "@/components/TestFlow";
+import { RedirectPage } from "@/components/RedirectPage";
+import { AGE_TEST } from "@/lib/routes";
 
-export const metadata: Metadata = {
-  title: "答题",
-};
-
-export default function TestPage() {
-  return <TestFlow />;
+export default function LegacyTestPage() {
+  return <RedirectPage href={AGE_TEST} />;
 }

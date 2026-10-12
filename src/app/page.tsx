@@ -1,40 +1,31 @@
-import { HeroSection } from "@/components/HeroSection";
-import { DIMENSIONS } from "@/types/quiz";
+import Link from "next/link";
+import { AGE_HOME } from "@/lib/routes";
 
-const FACTS = [
-  { title: "共 20 道题", text: "五个维度，每个维度四道题。" },
-  { title: "预计 3—5 分钟", text: "按最接近的反应选择即可。" },
-  { title: "没有对错", text: "选择最接近真实自己的那一个。" },
-  { title: "结果仅供自我探索参考", text: "不是临床测验，也不能用来诊断。" },
+const TESTS = [
+  {
+    href: AGE_HOME,
+    index: "01",
+    title: "心理年龄测试",
+    text: "20 道关于情绪、关系与自我认知的选择题，大约 3—5 分钟。进入后需要当天的 4 位测试码。",
+  },
 ];
 
 export default function HomePage() {
   return (
-    <>
-      <HeroSection />
-      <section className="mx-auto w-full max-w-3xl px-5 py-8">
-        <h2 className="text-sm text-sage">五个维度</h2>
-        <div className="mt-5 space-y-3">
-          {DIMENSIONS.map((dimension, index) => (
-            <article key={dimension.id} className="rounded-2xl border border-line bg-card px-5 py-5">
-              <p className="text-xs text-muted tabular-nums">{String(index + 1).padStart(2, "0")}</p>
-              <h3 className="mt-2 text-lg font-medium">{dimension.name}</h3>
-              <p className="mt-2 text-sm leading-7 text-muted">{dimension.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section className="mx-auto w-full max-w-3xl px-5 pt-4 pb-16">
-        <h2 className="text-sm text-sage">测试说明</h2>
-        <div className="mt-5 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
-          {FACTS.map((fact) => (
-            <article key={fact.title} className="rounded-2xl border border-line bg-card px-5 py-5">
-              <h3 className="text-base font-medium">{fact.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-muted">{fact.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-    </>
+    <section className="mx-auto w-full max-w-3xl px-5 pt-14 pb-16 md:pt-20">
+      <p className="text-[11px] tracking-[0.22em] text-sage">INNER AGE</p>
+      <h1 className="mt-4 text-3xl leading-tight font-medium tracking-tight text-balance md:text-5xl">选择一项测试</h1>
+      <p className="mt-4 max-w-xl text-base leading-8 text-muted">每项测试单独进入。结果只留在当前浏览器，不会上传。</p>
+      <div className="mt-12 space-y-3">
+        {TESTS.map((item) => (
+          <Link key={item.href} href={item.href} className="block rounded-3xl border border-line bg-card px-5 py-6">
+            <p className="text-xs text-muted tabular-nums">{item.index}</p>
+            <h2 className="mt-2 text-2xl font-medium tracking-tight">{item.title}</h2>
+            <p className="mt-3 text-sm leading-7 text-muted">{item.text}</p>
+            <p className="mt-5 text-sm text-foreground">进入测试</p>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }

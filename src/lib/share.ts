@@ -75,6 +75,16 @@ function withBasePath(url: string): string {
   return normalizeSiteUrl(parsed.toString());
 }
 
+export function joinSitePath(siteUrl: string, path: string): string {
+  const normalized = normalizeSiteUrl(siteUrl);
+  if (!normalized) return "";
+  const parsed = new URL(normalized);
+  const base = parsed.pathname.replace(/\/$/, "");
+  const extra = path.startsWith("/") ? path : `/${path}`;
+  parsed.pathname = `${base}${extra}`;
+  return normalizeSiteUrl(parsed.toString());
+}
+
 export function resolveShareSite(input: { configuredUrl?: string; origin?: string } = {}): ShareSite {
   const configured = publicUrl(input.configuredUrl);
   if (configured) return { url: configured, localPreview: false };

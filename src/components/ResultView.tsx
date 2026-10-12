@@ -12,6 +12,7 @@ import { ResultHero } from "@/components/ResultHero";
 import { ShareButtons } from "@/components/ShareButtons";
 import { useQuiz } from "@/components/QuizProvider";
 import { generateReport } from "@/lib/result-generator";
+import { AGE_HOME, AGE_TEST } from "@/lib/routes";
 
 const SYNTHESIS_FIELDS = [
   ["你的主要心理倾向", "mainTendency"],
@@ -33,7 +34,7 @@ export function ResultView() {
 
   function handleRetest() {
     reset();
-    router.push("/");
+    router.push(AGE_HOME);
   }
 
   if (!ready || !accessReady) {
@@ -55,7 +56,7 @@ export function ResultView() {
         <p className="mt-4 text-base leading-8 text-muted">
           填写实际年龄并完成全部 20 题后，报告会在这台设备的浏览器里生成，不会上传。
         </p>
-        <Link href="/test" className="btn btn-primary mt-8 w-full sm:w-auto">
+        <Link href={AGE_TEST} className="btn btn-primary mt-8 w-full sm:w-auto">
           继续测试
         </Link>
       </section>

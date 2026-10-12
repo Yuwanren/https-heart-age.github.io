@@ -3,7 +3,7 @@ import test from "node:test";
 import { DISCLAIMER_NOTE } from "@/data/analysis-content";
 import { QUESTIONS } from "@/data/questions";
 import { generateReport } from "@/lib/result-generator";
-import { buildShareSnippet, buildShareText, copyResult, normalizeSiteUrl, resolveShareSite, shareResult } from "@/lib/share";
+import { buildShareSnippet, buildShareText, copyResult, joinSitePath, normalizeSiteUrl, resolveShareSite, shareResult } from "@/lib/share";
 import type { Answers } from "@/types/quiz";
 
 function allAnswers(): Answers {
@@ -32,6 +32,12 @@ test("the short share text includes the card facts and not the full answer list"
   const hidden = buildShareSnippet(report, resolveShareSite({ origin: "http://localhost:3000" }).url);
   assert.equal(hidden.includes("localhost"), false);
   assert.equal(hidden.includes("127.0.0.1"), false);
+});
+
+test("a test path is appended to the public site url", () => {
+  assert.equal(joinSitePath("https://innerage.fun", "/age"), "https://innerage.fun/age");
+  assert.equal(joinSitePath("https://user.github.io/heart-age/", "/age"), "https://user.github.io/heart-age/age");
+  assert.equal(joinSitePath("", "/age"), "");
 });
 
 test("a public site root can include the configured base path", () => {

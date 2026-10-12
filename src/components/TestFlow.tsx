@@ -13,6 +13,7 @@ import { QUESTIONS } from "@/data/questions";
 import { answeredCount, canGenerateResult, firstUnansweredIndex } from "@/lib/quiz-state";
 import { saveQuiz } from "@/lib/storage";
 import { getAnswer } from "@/lib/scoring";
+import { AGE_HOME, AGE_RESULT } from "@/lib/routes";
 import { DIMENSIONS } from "@/types/quiz";
 
 export function TestFlow() {
@@ -65,7 +66,7 @@ export function TestFlow() {
         <p className="text-sm text-muted tabular-nums">
           {String(question.id).padStart(2, "0")} / {String(QUESTIONS.length).padStart(2, "0")}
         </p>
-        <Link href="/" className="btn btn-text">
+        <Link href={AGE_HOME} className="btn btn-text">
           返回首页
         </Link>
       </div>
@@ -115,7 +116,7 @@ export function TestFlow() {
               onClick={() => {
                 if (!canGenerateResult(state)) return;
                 saveQuiz(state);
-                router.push("/result");
+                router.push(AGE_RESULT);
               }}
             >
               生成我的测试结果
