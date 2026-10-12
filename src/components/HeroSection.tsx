@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { AccessForm } from "@/components/AccessForm";
+import { useAccess } from "@/components/AccessProvider";
 import { useQuiz } from "@/components/QuizProvider";
 import { answeredCount, canGenerateResult } from "@/lib/quiz-state";
 
 export function HeroSection() {
+  const { ready: accessReady, allowed } = useAccess();
   const { ready, state } = useQuiz();
   const savedCount = answeredCount(state.answers);
   const hasSaved = state.actualAge !== null || savedCount > 0;
@@ -27,25 +30,31 @@ export function HeroSection() {
         </p>
         <p className="mt-3 max-w-xl text-base leading-8 text-muted">没有标准答案，选择最接近真实自己的那一个。</p>
         <div className="mt-8 flex flex-col items-stretch gap-4 sm:items-start">
-          <Link href="/test" className="btn btn-primary w-full sm:w-auto">
-            开始测试
-          </Link>
-          {ready && hasSaved ? (
-            <p className="max-w-xl text-sm leading-6 text-muted">
-              {complete ? (
-                <>
-                  当前浏览器里留有一份完整结果。
-                  <Link href="/result" className="ml-2 inline-flex min-h-11 items-center text-foreground underline decoration-line underline-offset-4">
-                    查看结果
-                  </Link>
-                </>
+          {!accessReady ? <p className="text-sm text-muted">正在确认测试码…</p> : null}
+          {accessReady && !allowed ? <AccessForm /> : null}
+          {accessReady && allowed ? (
+            <>
+              <Link href="/test" className="btn btn-primary w-full sm:w-auto">
+                开始测试
+              </Link>
+              {ready && hasSaved ? (
+                <p className="max-w-xl text-sm leading-6 text-muted">
+                  {complete ? (
+                    <>
+                      当前浏览器里留有一份完整结果。
+                      <Link href="/result" className="ml-2 inline-flex min-h-11 items-center text-foreground underline decoration-line underline-offset-4">
+                        查看结果
+                      </Link>
+                    </>
+                  ) : (
+                    "当前浏览器里留有未完成的进度。开始测试后，会从上次的位置继续。"
+                  )}
+                </p>
               ) : (
-                "当前浏览器里留有未完成的进度。开始测试后，会从上次的位置继续。"
+                <p className="max-w-xl text-sm leading-6 text-muted">答题进度只保存在当前浏览器，不会上传。</p>
               )}
-            </p>
-          ) : (
-            <p className="max-w-xl text-sm leading-6 text-muted">答题进度只保存在当前浏览器，不会上传。</p>
-          )}
+            </>
+          ) : null}
         </div>
       </div>
     </section>

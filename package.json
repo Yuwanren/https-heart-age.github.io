@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test src/data/questions.test.ts src/lib/scoring.test.ts src/lib/result-generator.test.ts src/lib/quiz-state.test.ts src/lib/storage.test.ts src/lib/share.test.ts"
+    "test": "node --import tsx --test src/data/questions.test.ts src/lib/scoring.test.ts src/lib/result-generator.test.ts src/lib/quiz-state.test.ts src/lib/storage.test.ts src/lib/share.test.ts src/lib/access.test.ts",
+    "pass": "node scripts/issue-access-code.mjs"
   },
   "dependencies": {
     "next": "16.4.0",

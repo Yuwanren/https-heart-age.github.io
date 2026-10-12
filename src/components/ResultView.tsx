@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { AccessForm } from "@/components/AccessForm";
+import { useAccess } from "@/components/AccessProvider";
 import { DimensionAnalysis } from "@/components/DimensionAnalysis";
 import { DimensionScore } from "@/components/DimensionScore";
 import { Disclaimer } from "@/components/Disclaimer";
@@ -21,6 +23,7 @@ const SYNTHESIS_FIELDS = [
 ] as const;
 
 export function ResultView() {
+  const { ready: accessReady, allowed } = useAccess();
   const { ready, state, reset } = useQuiz();
   const router = useRouter();
   const report = useMemo(
@@ -33,8 +36,16 @@ export function ResultView() {
     router.push("/");
   }
 
-  if (!ready) {
+  if (!ready || !accessReady) {
     return <p className="px-5 py-20 text-center text-sm text-muted">正在读取保存在当前浏览器中的结果…</p>;
+  }
+
+  if (!allowed) {
+    return (
+      <div className="mx-auto w-full max-w-xl px-5 py-14">
+        <AccessForm />
+      </div>
+    );
   }
 
   if (!report) {

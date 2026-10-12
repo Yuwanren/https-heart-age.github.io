@@ -4,6 +4,7 @@ import { Geist } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { QuizProvider } from "@/components/QuizProvider";
+import { AccessProvider } from "@/components/AccessProvider";
 import { resolveShareSite } from "@/lib/share";
 import "./globals.css";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="zh-CN" className={`${geistSans.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <QuizProvider>
+          <AccessProvider>
           <a
             href="#content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2"
@@ -51,6 +53,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          </AccessProvider>
         </QuizProvider>
       </body>
     </html>

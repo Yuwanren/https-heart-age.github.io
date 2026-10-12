@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AccessForm } from "@/components/AccessForm";
+import { useAccess } from "@/components/AccessProvider";
 import { AgeInput } from "@/components/AgeInput";
 import { ProgressBar } from "@/components/ProgressBar";
 import { QuestionCard } from "@/components/QuestionCard";
@@ -14,6 +16,7 @@ import { getAnswer } from "@/lib/scoring";
 import { DIMENSIONS } from "@/types/quiz";
 
 export function TestFlow() {
+  const { ready: accessReady, allowed } = useAccess();
   const { ready, state, setActualAge, selectAnswer, next, prev, goTo } = useQuiz();
   const router = useRouter();
   const [editingAge, setEditingAge] = useState(false);
@@ -30,8 +33,16 @@ export function TestFlow() {
     window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   }, [ready, state.actualAge, state.currentIndex]);
 
-  if (!ready) {
+  if (!ready || !accessReady) {
     return <p className="px-5 py-20 text-center text-sm text-muted">正在读取保存在当前浏览器中的进度…</p>;
+  }
+
+  if (!allowed) {
+    return (
+      <div className="mx-auto w-full max-w-xl px-5 py-14">
+        <AccessForm />
+      </div>
+    );
   }
 
   if (state.actualAge === null || editingAge) {
