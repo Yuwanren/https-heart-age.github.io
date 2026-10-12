@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 心理年龄测试
 
-## Getting Started
+纯前端的自我探索小站。20 道选择题、评分、心理年龄估算和报告都在浏览器本地完成，不上传答案。
 
-First, run the development server:
+## 本地预览
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 检查
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test
+npm run build
+npm start
+```
 
-## Learn More
+`npm start` 会在本地启动生产版本，默认地址仍是 [http://localhost:3000](http://localhost:3000)。
 
-To learn more about Next.js, take a look at the following resources:
+## 部署成公开网址
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+这是纯前端站点，不需要数据库或 API 密钥。代码可以放在 GitHub。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+分享网址使用 `NEXT_PUBLIC_SITE_URL`。没有配置时，页面会使用当前浏览器的公开访问地址。`localhost`、`127.0.0.1` 和局域网地址不会写入分享文案。变量说明见 `.env.example`。
 
-## Deploy on Vercel
+### GitHub Pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. 把项目推到 GitHub 的 `main` 或 `master` 分支。
+2. 在仓库 Settings → Pages 中，把 Source 设为 GitHub Actions。
+3. 如果网站不在域名根路径，到 Settings → Secrets and variables → Actions → Variables，添加：
+   - `NEXT_PUBLIC_SITE_URL`：完整公开地址，例如 `https://your-name.github.io/heart-age`
+   - `NEXT_PUBLIC_BASE_PATH`：仓库路径，例如 `/heart-age`
+4. 推送后，`.github/workflows/pages.yml` 会执行测试和静态构建，并发布 `out` 目录。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+用户站点 `https://your-name.github.io` 不需要 `NEXT_PUBLIC_BASE_PATH`。
+
+### 需要 Node 的平台
+
+不设置 `GITHUB_PAGES` 时，构建仍是常规 Next.js 输出。
+
+- Vercel：导入 GitHub 仓库，Build Command 为 `npm run build`。
+- 其他 Node 平台：`npm run build` 之后用 `npm start` 启动。
+
+答题进度只写在访问者自己的浏览器里。
