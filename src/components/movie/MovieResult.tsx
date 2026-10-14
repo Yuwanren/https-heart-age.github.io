@@ -56,7 +56,7 @@ export function MovieResult() {
         report.winner.limit,
         ...(shareUrl ? ["", shareUrl] : []),
         "",
-        "看过电影之后的对照，不是性格鉴定。",
+        "看过电影再做的题，不是性格测试。",
       ].join("\n")
     : "";
 
@@ -80,8 +80,8 @@ export function MovieResult() {
   if (!report) {
     return (
       <section className="mx-auto w-full max-w-xl px-5 py-16">
-        <h1 className="text-3xl font-medium tracking-tight">还没有选完 15 个场面</h1>
-        <p className="mt-4 text-base leading-8 text-muted">选完之后，结果在这台浏览器里生成，不会上传。</p>
+        <h1 className="text-3xl font-medium tracking-tight">15 道题还没做完</h1>
+        <p className="mt-4 text-base leading-8 text-muted">做完之后，结果只在这台浏览器里生成，不会上传。</p>
         <Link href={MOVIE_TEST} className="btn btn-primary mt-8 w-full sm:w-auto">
           继续测试
         </Link>
@@ -99,12 +99,12 @@ export function MovieResult() {
         <p className="mt-6 text-base leading-8">{report.winner.reading}</p>
         <p className="mt-4 text-base leading-8 text-muted">{report.winner.limit}</p>
         {report.tied ? (
-          <p className="mt-4 text-sm leading-6 text-muted">有人和你一样高。按尹天仇、柳飘飘、杜娟儿、洪爷、派饭的达叔、田鸡这个顺序，取前面的一位。</p>
+          <p className="mt-4 text-sm leading-6 text-muted">有两个人得分一样。按尹天仇、柳飘飘、杜娟儿、洪爷、派饭的达叔、田鸡的顺序，算排在前面的那位。</p>
         ) : null}
       </section>
 
       <section className="rounded-3xl border border-line bg-card px-5 py-7 md:px-10">
-        <h2 className="text-xl font-medium tracking-tight">15 题里的选择</h2>
+        <h2 className="text-xl font-medium tracking-tight">各人得分</h2>
         <ul className="mt-6 space-y-3">
           {report.scores.map((item) => (
             <li key={item.id} className="flex items-center justify-between gap-3 text-base">
@@ -116,8 +116,8 @@ export function MovieResult() {
       </section>
 
       <section className="rounded-3xl border border-line bg-card px-5 py-7 md:px-8">
-        <h2 className="text-xl font-medium">把这句留下来</h2>
-        <p className="mt-3 text-sm leading-7 text-muted">分享的是最像的人和一段对照，不含你的每个选项。{shareUrl ? "" : "当前没有公开网址，分享文字里不会写地址。"}</p>
+        <h2 className="text-xl font-medium">把结果留下来</h2>
+        <p className="mt-3 text-sm leading-7 text-muted">分享时只写最像的人和一段说明，不会带上你每道题的选择。{shareUrl ? "" : "现在这个地址不能公开分享，所以文字里不放网址。"}</p>
         {shareUrl ? <p className="mt-4 text-sm break-all">{shareUrl}</p> : null}
         <div className="mt-6 grid grid-cols-1 gap-3 min-[520px]:grid-cols-3">
           <button
@@ -168,7 +168,7 @@ export function MovieResult() {
           />
         ) : null}
       </section>
-      <p className="px-1 text-sm leading-7 text-muted">这是看过《喜剧之王》之后的对照，不是性格鉴定。短句来自电影，其余是这场测试的说法。</p>
+      <p className="px-1 text-sm leading-7 text-muted">这是看过《喜剧之王》之后做的题，不是性格测试。带引号的短句来自电影，其余是这套题自己的说法。</p>
     </div>
   );
 }

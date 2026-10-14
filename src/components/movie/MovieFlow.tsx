@@ -54,7 +54,7 @@ export function MovieFlow() {
           {String(question.id).padStart(2, "0")} / {String(MOVIE_QUESTIONS.length).padStart(2, "0")}
         </p>
         <Link href={MOVIE_HOME} className="btn btn-text">
-          返回介绍
+          返回
         </Link>
       </div>
       <div className="mt-4">
@@ -89,10 +89,10 @@ export function MovieFlow() {
         })}
       </div>
       <div className="mt-8 border-t border-line pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        {!selected ? <p className="mb-3 text-sm text-muted">请先选择一个最接近的做法。</p> : null}
+        {!selected ? <p className="mb-3 text-sm text-muted">请先选一个最接近你的做法。</p> : null}
         {isLast && selected && !canFinish ? (
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-muted">还有场面没选完。15 个都选过，才能看出最像谁。</p>
+            <p className="text-sm text-muted">还有题没选。15 道都做完，才能看出你最像谁。</p>
             <button type="button" className="btn btn-text px-0" onClick={() => goTo(firstUnansweredMovie(state.answers))}>
               回到未完成的题目
             </button>

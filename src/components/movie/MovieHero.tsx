@@ -17,8 +17,8 @@ export function MovieHero() {
   return (
     <section className="mx-auto w-full max-w-3xl px-5 pt-14 pb-16 md:pt-20">
       <p className="text-[11px] tracking-[0.22em] text-sage">KING OF COMEDY</p>
-      <h1 className="mt-4 text-3xl leading-tight font-medium tracking-tight text-balance md:text-5xl">你像喜剧之王里的谁</h1>
-      <p className="mt-4 max-w-xl text-base leading-8 text-muted md:text-lg">15 个场面。看过这部电影再答，会比较像。</p>
+      <h1 className="mt-4 text-3xl leading-tight font-medium tracking-tight text-balance md:text-5xl">你更像《喜剧之王》里的谁</h1>
+      <p className="mt-4 max-w-xl text-base leading-8 text-muted md:text-lg">15 道题。看过这部电影，答起来会更准。</p>
       <p className="mt-6 text-sm tracking-[0.35em] text-foreground">努力！奋斗！</p>
 
       <div className="mt-10 flex flex-wrap gap-2">
