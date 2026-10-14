@@ -24,7 +24,7 @@ const SYNTHESIS_FIELDS = [
 ] as const;
 
 export function ResultView() {
-  const { ready: accessReady, allowed } = useAccess();
+  const { ready: accessReady, allowed, accept } = useAccess();
   const { ready, state, reset } = useQuiz();
   const router = useRouter();
   const report = useMemo(
@@ -44,7 +44,7 @@ export function ResultView() {
   if (!allowed) {
     return (
       <div className="mx-auto w-full max-w-xl px-5 py-14">
-        <AccessForm />
+        <AccessForm accept={accept} />
       </div>
     );
   }

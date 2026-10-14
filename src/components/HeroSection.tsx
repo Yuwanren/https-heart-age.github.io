@@ -8,7 +8,7 @@ import { answeredCount, canGenerateResult } from "@/lib/quiz-state";
 import { AGE_RESULT, AGE_TEST } from "@/lib/routes";
 
 export function HeroSection() {
-  const { ready: accessReady, allowed } = useAccess();
+  const { ready: accessReady, allowed, accept } = useAccess();
   const { ready, state } = useQuiz();
   const savedCount = answeredCount(state.answers);
   const hasSaved = state.actualAge !== null || savedCount > 0;
@@ -32,7 +32,7 @@ export function HeroSection() {
         <p className="mt-3 max-w-xl text-base leading-8 text-muted">没有标准答案，选择最接近真实自己的那一个。</p>
         <div className="mt-8 flex flex-col items-stretch gap-4 sm:items-start">
           {!accessReady ? <p className="text-sm text-muted">正在确认测试码…</p> : null}
-          {accessReady && !allowed ? <AccessForm /> : null}
+          {accessReady && !allowed ? <AccessForm accept={accept} /> : null}
           {accessReady && allowed ? (
             <>
               <Link href={AGE_TEST} className="btn btn-primary w-full sm:w-auto">

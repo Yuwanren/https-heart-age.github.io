@@ -161,13 +161,13 @@ function provided<K extends keyof ShareEnvironment>(env: ShareEnvironment | unde
   return !!env && Object.prototype.hasOwnProperty.call(env, key);
 }
 
-export async function shareResult(text: string, env?: ShareEnvironment): Promise<ShareStatus> {
+export async function shareResult(text: string, env?: ShareEnvironment, title = "心理年龄测试"): Promise<ShareStatus> {
   const share = provided(env, "share") ? env?.share : defaultShare();
   const writeText = provided(env, "writeText") ? env?.writeText : defaultWrite();
 
   if (share) {
     try {
-      await share({ title: "心理年龄测试", text });
+      await share({ title, text });
       return "shared";
     } catch (error) {
       if (isAbortError(error)) return "cancelled";

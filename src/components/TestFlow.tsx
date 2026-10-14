@@ -17,7 +17,7 @@ import { AGE_HOME, AGE_RESULT } from "@/lib/routes";
 import { DIMENSIONS } from "@/types/quiz";
 
 export function TestFlow() {
-  const { ready: accessReady, allowed } = useAccess();
+  const { ready: accessReady, allowed, accept } = useAccess();
   const { ready, state, setActualAge, selectAnswer, next, prev, goTo } = useQuiz();
   const router = useRouter();
   const [editingAge, setEditingAge] = useState(false);
@@ -41,7 +41,7 @@ export function TestFlow() {
   if (!allowed) {
     return (
       <div className="mx-auto w-full max-w-xl px-5 py-14">
-        <AccessForm />
+        <AccessForm accept={accept} />
       </div>
     );
   }

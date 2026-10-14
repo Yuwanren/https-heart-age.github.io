@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AGE_HOME } from "@/lib/routes";
+import { AGE_HOME, MOVIE_HOME } from "@/lib/routes";
 
 const TESTS = [
   {
@@ -7,6 +7,12 @@ const TESTS = [
     index: "01",
     title: "心理年龄测试",
     text: "20 道关于情绪、关系与自我认知的选择题，大约 3—5 分钟。进入后需要当天的 4 位测试码。",
+  },
+  {
+    href: MOVIE_HOME,
+    index: "02",
+    title: "喜剧之王",
+    text: "15 个场面，看你更接近片中的哪一个人物。进入后需要本周的 4 位测试码。",
   },
 ];
 

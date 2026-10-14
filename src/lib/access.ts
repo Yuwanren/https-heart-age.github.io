@@ -45,11 +45,15 @@ export function shanghaiDayEnd(now = Date.now()): number {
   return start + DAY_MS;
 }
 
-export async function accessCodeForDay(day: string): Promise<string> {
-  const bytes = new TextEncoder().encode(`${ACCESS_SECRET}:${day}`);
+export async function accessCodeForSecret(secret: string, key: string): Promise<string> {
+  const bytes = new TextEncoder().encode(`${secret}:${key}`);
   const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
   const value = ((digest[0] << 8) | digest[1]) % 10000;
   return String(value).padStart(4, "0");
+}
+
+export async function accessCodeForDay(day: string): Promise<string> {
+  return accessCodeForSecret(ACCESS_SECRET, day);
 }
 
 function sameCode(input: string, expected: string): boolean {

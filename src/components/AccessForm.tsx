@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useAccess } from "@/components/AccessProvider";
 
-export function AccessForm() {
-  const { accept } = useAccess();
+export function AccessForm({
+  accept,
+  description = "4 位数字，按北京时间当天有效。过了 0 点再打开，需要新的测试码。只知道网址不能开始测试。",
+  errorMessage = "测试码不正确，或已经过了今天。",
+  inputId = "access-code",
+}: {
+  accept: (code: string) => Promise<boolean>;
+  description?: string;
+  errorMessage?: string;
+  inputId?: string;
+}) {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -18,19 +26,19 @@ export function AccessForm() {
         setPending(true);
         void accept(value).then((ok) => {
           setPending(false);
-          setError(ok ? "" : "测试码不正确，或已经过了今天。");
+          setError(ok ? "" : errorMessage);
         });
       }}
     >
       <h2 className="text-xl font-medium tracking-tight">输入测试码</h2>
       <p className="mt-3 text-sm leading-7 text-muted">
-        4 位数字，按北京时间当天有效。过了 0 点再打开，需要新的测试码。只知道网址不能开始测试。
+        {description}
       </p>
-      <label htmlFor="access-code" className="mt-6 block text-sm text-foreground">
+      <label htmlFor={inputId} className="mt-6 block text-sm text-foreground">
         测试码
       </label>
       <input
-        id="access-code"
+        id={inputId}
         value={value}
         inputMode="numeric"
         autoComplete="off"
