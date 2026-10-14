@@ -75,10 +75,10 @@ export const MOVIE_QUESTIONS: MovieQuestion[] = [
     scene: "片场",
     prompt: "你演的龙套一出场就被打死，一句台词也没有。有人朝你喊：能不能有点专业精神。盒饭还没到，摄影已经在催下一场。这时你怎么做？",
     options: [
-      { id: "A", character: "yin", text: "死也要死出个样子。导演没喊停，你还躺着。心里那句还是：其实我是一个演员。" },
-      { id: "B", character: "hong", text: "你不接他的话。专不专业，要看这里谁说了算，轮不到一个龙套开口。" },
-      { id: "C", character: "lunch", text: "你不接这句喊。先把盒饭数目点清。戏可以催，饭还是要数。" },
-      { id: "D", character: "frog", text: "你不接这句话。你站在该站的地方，等上面的人发话。" },
+      { id: "A", character: "yin", text: "你继续躺着。没人喊停，这个死你就演到底，嘴里还是那句：其实我是一个演员。" },
+      { id: "B", character: "hong", text: "你看都不看他。这种话轮不到龙套喊，这里谁说了算，谁才配谈专业。" },
+      { id: "C", character: "lunch", text: "你放下这场戏，去点盒饭的数目。喊归喊，饭还是要数清楚。" },
+      { id: "D", character: "frog", text: "你站在原地，一句话不回。上面的人没发话，你就不动。" },
     ],
   },
   {
