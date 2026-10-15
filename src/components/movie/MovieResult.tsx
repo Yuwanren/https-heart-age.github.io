@@ -52,8 +52,7 @@ export function MovieResult() {
         report.winner.name,
         ...(report.winner.line ? [report.winner.line] : []),
         "",
-        report.winner.reading,
-        report.winner.limit,
+        ...report.winner.sections.flatMap((section) => [section.heading, section.text, ""]),
         ...(shareUrl ? ["", shareUrl] : []),
         "",
         "看过电影再做的题，不是性格测试。",
@@ -96,28 +95,22 @@ export function MovieResult() {
         <p className="mt-6 text-sm text-muted">你最像</p>
         <h1 className="mt-2 text-4xl font-medium tracking-tight md:text-6xl">{report.winner.name}</h1>
         {report.winner.line ? <p className="mt-6 text-xl leading-8">{report.winner.line}</p> : null}
-        <p className="mt-6 text-base leading-8">{report.winner.reading}</p>
-        <p className="mt-4 text-base leading-8 text-muted">{report.winner.limit}</p>
-        {report.tied ? (
-          <p className="mt-4 text-sm leading-6 text-muted">有两个人得分一样。按尹天仇、柳飘飘、杜娟儿、洪爷、派饭的达叔、田鸡的顺序，算排在前面的那位。</p>
-        ) : null}
-      </section>
-
-      <section className="rounded-3xl border border-line bg-card px-5 py-7 md:px-10">
-        <h2 className="text-xl font-medium tracking-tight">各人得分</h2>
-        <ul className="mt-6 space-y-3">
-          {report.scores.map((item) => (
-            <li key={item.id} className="flex items-center justify-between gap-3 text-base">
-              <span className={item.id === report.winner.id ? "font-medium" : "text-muted"}>{item.name}</span>
-              <span className="tabular-nums">{item.score}</span>
-            </li>
+        <div className="mt-8 space-y-6">
+          {report.winner.sections.map((section) => (
+            <div key={section.heading}>
+              <h2 className="text-sm text-sage">{section.heading}</h2>
+              <p className="mt-2 text-base leading-8">{section.text}</p>
+            </div>
           ))}
-        </ul>
+        </div>
+        {report.tied ? (
+          <p className="mt-6 text-sm leading-6 text-muted">有两个人一样接近。按尹天仇、柳飘飘、杜娟儿、洪爷、派饭的达叔、田鸡的顺序，写成排在前面的那位。</p>
+        ) : null}
       </section>
 
       <section className="rounded-3xl border border-line bg-card px-5 py-7 md:px-8">
         <h2 className="text-xl font-medium">把结果留下来</h2>
-        <p className="mt-3 text-sm leading-7 text-muted">分享时只写最像的人和一段说明，不会带上你每道题的选择。{shareUrl ? "" : "现在这个地址不能公开分享，所以文字里不放网址。"}</p>
+        <p className="mt-3 text-sm leading-7 text-muted">分享时只写最像的人和一段人物解读，不会带上你每道题的选择。{shareUrl ? "" : "现在这个地址不能公开分享，所以文字里不放网址。"}</p>
         {shareUrl ? <p className="mt-4 text-sm break-all">{shareUrl}</p> : null}
         <div className="mt-6 grid grid-cols-1 gap-3 min-[520px]:grid-cols-3">
           <button
